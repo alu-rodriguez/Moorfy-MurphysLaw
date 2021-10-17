@@ -1,5 +1,6 @@
-from flask import Blueprint
-from . import db
+from flask import Blueprint, current_app
+
+from app.db.models import Menu
 
 
 bp = Blueprint('health', __name__, url_prefix='/health-check')
@@ -13,7 +14,8 @@ def shallow_check():
 @bp.route('/1')
 def deep_check():
     try:
-        db.get_db().execute('SELECT Id FROM MenuItem LIMIT 1')
+        Menu.query.limit(1).all()
         return 'Everything seems fine'
-    except Exception:
+    except Exception as e:
+        current_app.logger(e)
         return 'Something\'s not working'

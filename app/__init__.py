@@ -1,5 +1,9 @@
 import os
+
 from flask import Flask, send_from_directory
+
+from . import api, health
+from app.db import management
 
 
 def create_app(test_config=None):
@@ -14,10 +18,8 @@ def create_app(test_config=None):
     else:
         app.config.from_pyfile('config.py', silent=True)
 
-    from . import db
-    db.init_app(app)
+    db.management.init_app(app)
 
-    from . import api, health
     app.register_blueprint(health.bp)
     app.register_blueprint(api.bp)
 
