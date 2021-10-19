@@ -1,10 +1,16 @@
-from flask import Flask, send_from_directory, jsonify
+import os
+
+from flask import Flask, send_from_directory
+
+from . import api, health
+from app.db import management
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'tp.sqlite'),
     )
 
     if test_config:
@@ -12,18 +18,12 @@ def create_app(test_config=None):
     else:
         app.config.from_pyfile('config.py', silent=True)
 
-    # Para testear que funcione el ruteo desde el cliente
-    @app.route('/api/app-info')
-    def app_info():
-        return jsonify(
-            name='ArquiWeb - TP 1'
-        )
+    db.management.init_app(app)
 
-    @app.route('/health-check')
-    def health_check():
-        return 'I\'m alive!'
+    app.register_blueprint(health.bp)
+    app.register_blueprint(api.bp)
 
-    @app.route('/<path:path>', methods=['GET'])
+    @app.route('/<path:path>')
     def static_proxy(path):
         return send_from_directory('../public', path)
 
