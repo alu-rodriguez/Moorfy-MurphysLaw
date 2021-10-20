@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, send_from_directory
 
-from . import api, health
+from . import api, health, clients_api
 from app.db import management
 
 
@@ -22,6 +22,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(health.bp)
     app.register_blueprint(api.bp)
+    app.register_blueprint(clients_api.bp)
 
     @app.route('/<path:path>')
     def static_proxy(path):
@@ -29,6 +30,6 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return send_from_directory('../public', 'index.html')
+        return send_from_directory('../client/src/', 'index.html')
 
     return app

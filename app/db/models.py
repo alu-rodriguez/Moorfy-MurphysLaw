@@ -80,4 +80,5 @@ class Order(Base):
     user_id: int = Column('UserId', Integer, ForeignKey(User.id))
     status_id: int = Column('StatusId', Integer, ForeignKey(OrderStatus.id))
     content: str = Column('Content', String, nullable=False)
+    table_number: int = Column('TableNumber', Integer, nullable=False)
     timestamp: Optional[datetime] = Column('Timestamp', DateTime)
