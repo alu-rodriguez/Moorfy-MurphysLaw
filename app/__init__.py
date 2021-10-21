@@ -30,6 +30,6 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return send_from_directory('../client/src/', 'index.html')
+        return send_from_directory('../public', 'index.html')
 
     return app
