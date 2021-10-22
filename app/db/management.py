@@ -1,3 +1,4 @@
+import pathlib
 import sqlite3
 
 import click
@@ -15,6 +16,8 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 
 def get_db():
     if 'db' not in g:
+        path = pathlib.Path(current_app.instance_path)
+        path.mkdir(parents=False, exist_ok=True)
         g.db = sqlite3.connect(
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
