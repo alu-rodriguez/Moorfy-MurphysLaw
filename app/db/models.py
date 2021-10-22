@@ -47,13 +47,15 @@ class Branch(Base):
     __tablename__ = 'Branch'
 
     id: int = Column('Id', Integer, primary_key=True, autoincrement=True)
+    name: str = Column('Name', String, nullable=False)
     latitude: float = Column('Latitude', Float, nullable=False)
     longitude: float = Column('Longitude', Float, nullable=False)
-    menu_id: int = Column('MenuId', Integer, ForeignKey(Menu.id))
+    #menu_id: int = Column('MenuId', Integer, ForeignKey(Menu.id))
     number_of_tables: int = Column('NumberOfTables', Integer, nullable=False)
     email: str = Column('Email', String, nullable=False)
     phone_number: int = Column('PhoneNumber', Integer, nullable=False)
     logo_url: str = Column('LogoUrl', String, nullable=False)
+    menu_url: str = Column('MenuUrl', String, nullable=False)
     mode: str = Column('Mode', Enum(OperationModes), nullable=False)
 
 
@@ -80,4 +82,5 @@ class Order(Base):
     user_id: int = Column('UserId', Integer, ForeignKey(User.id))
     status_id: int = Column('StatusId', Integer, ForeignKey(OrderStatus.id))
     content: str = Column('Content', String, nullable=False)
+    table_number: int = Column('TableNumber', Integer, nullable=False)
     timestamp: Optional[datetime] = Column('Timestamp', DateTime)

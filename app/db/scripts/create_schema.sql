@@ -25,6 +25,7 @@ CREATE TABLE User
 CREATE TABLE Branch
 (
     Id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name           TEXT    NOT NULL,
     Latitude       REAL    NOT NULL,
     Longitude      REAL    NOT NULL,
     NumberOfTables INTEGER NOT NULL,
