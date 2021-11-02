@@ -205,3 +205,44 @@ def amend_location():
 
     return jsonify({'resultado': "La ubicación ha sido corregida.", 'latitude': branch.latitude,
                     'longitude': branch.longitude})
+
+#Devuelve la lista de las ordenes activas
+# Ejemplo url: http://127.0.0.1:5000/owners/active_orders?branch_id=1
+@bp.route('/active_orders')
+def active_orders():
+    branch_id = request.args['branch_id']
+
+    orders_list = Order.query.filter(Order.branch_id == branch_id, Order.status_id != OrderStatuses.REJECTED,
+                                     Order.status_id != OrderStatuses.READY)
+    orders_response = []
+    for o in orders_list:
+        an_order: Order = o
+        orders_response.append({
+            'order_id': an_order.id,
+            'table_number': an_order.table_number,
+            'timestamp': an_order.timestamp,
+            'content': an_order.content,
+            'status': OrderStatuses(an_order.status_id).name
+        })
+
+    return jsonify(orders_response)
+
+#Devuelve la lista de las ordenes historicas de la sucursal
+# Ejemplo url: http://127.0.0.1:5000/owners/historical_orders?branch_id=1
+@bp.route('/historical_orders')
+def historical_orders():
+    branch_id = request.args['branch_id']
+
+    orders_list = Order.query.filter(Order.branch_id == branch_id)
+    orders_response = []
+    for o in orders_list:
+        an_order: Order = o
+        orders_response.append({
+            'order_id': an_order.id,
+            'table_number': an_order.table_number,
+            'timestamp': an_order.timestamp,
+            'content': an_order.content,
+            'status': OrderStatuses(an_order.status_id).name
+        })
+
+    return jsonify(orders_response)
