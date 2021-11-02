@@ -20,18 +20,7 @@ def branches_list():
     branch_list = Branch.query.all()
     branches_response = []
     for b in branch_list:
-        a_branch: Branch = b
-        branches_response.append({
-            'name': a_branch.name,
-            'latitude': a_branch.latitude,
-            'longitude': a_branch.longitude,
-            'number_of_tables': a_branch.number_of_tables,
-            'email': a_branch.email,
-            'phone_number': a_branch.phone_number,
-            'logo_url': a_branch.logo_url,
-            'menu_url': a_branch.menu_url,
-            'mode': a_branch.mode
-        })
+        branches_response.append(Branch.jsonify(b))
 
     return jsonify(branches_response)
 

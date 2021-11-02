@@ -216,14 +216,7 @@ def active_orders():
                                      Order.status_id != OrderStatuses.READY)
     orders_response = []
     for o in orders_list:
-        an_order: Order = o
-        orders_response.append({
-            'order_id': an_order.id,
-            'table_number': an_order.table_number,
-            'timestamp': an_order.timestamp,
-            'content': an_order.content,
-            'status': OrderStatuses(an_order.status_id).name
-        })
+        orders_response.append(Order.jsonify(o))
 
     return jsonify(orders_response)
 
@@ -236,13 +229,6 @@ def historical_orders():
     orders_list = Order.query.filter(Order.branch_id == branch_id)
     orders_response = []
     for o in orders_list:
-        an_order: Order = o
-        orders_response.append({
-            'order_id': an_order.id,
-            'table_number': an_order.table_number,
-            'timestamp': an_order.timestamp,
-            'content': an_order.content,
-            'status': OrderStatuses(an_order.status_id).name
-        })
+        orders_response.append(Order.jsonify(o))
 
     return jsonify(orders_response)

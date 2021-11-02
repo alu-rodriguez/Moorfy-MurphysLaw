@@ -59,6 +59,19 @@ class Branch(Base):
     mode: str = Column('Mode', Enum(OperationModes), nullable=False)
     owner_id: int = Column('OwnerId', Integer, nullable=False)
 
+    def jsonify(self):
+        return {
+            'name': self.name,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'number_of_tables': self.number_of_tables,
+            'email': self.email,
+            'phone_number': self.phone_number,
+            'logo_url': self.logo_url,
+            'menu_url': self.menu_url,
+            'mode': self.mode
+        }
+
 
 class OrderStatuses(enum.IntEnum):
     PENDING = 1
@@ -85,3 +98,12 @@ class Order(Base):
     content: str = Column('Content', String, nullable=False)
     table_number: int = Column('TableNumber', Integer, nullable=False)
     timestamp: Optional[datetime] = Column('Timestamp', DateTime)
+
+    def jsonify(self):
+        return {
+            'order_id': id,
+            'table_number': self.table_number,
+            'timestamp': self.selftimestamp,
+            'content': self.content,
+            'status': OrderStatuses(self.status_id).name
+        }
