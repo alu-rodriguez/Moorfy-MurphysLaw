@@ -57,6 +57,7 @@ class Branch(Base):
     logo_url: str = Column('LogoUrl', String, nullable=False)
     menu_url: str = Column('MenuUrl', String, nullable=False)
     mode: str = Column('Mode', Enum(OperationModes), nullable=False)
+    owner_id: int = Column('OwnerId', Integer, nullable=False)
 
 
 class OrderStatuses(enum.IntEnum):

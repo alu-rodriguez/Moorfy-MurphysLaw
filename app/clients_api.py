@@ -1,8 +1,8 @@
 import logging
+
 from datetime import datetime
 
-from flask import Blueprint, jsonify, request
-from sqlalchemy.orm import session
+from flask import Blueprint, jsonify, request, json
 from app.db.models import Branch, Order, OrderStatuses
 from app.db.management import db_session
 
@@ -66,3 +66,25 @@ def ask_for_menu():
     branch: Branch = Branch.query.filter(Branch.id == branch_menu_id).one()
 
     return jsonify({'menu_url': branch.menu_url})
+
+# Genera la orden en la base
+# URL ejemplo: http://127.0.0.1:5000/clients/ask_status_of_order?branch_id=1&table_id=2&user_id=3
+@bp.route('/ask_status_of_order')
+def ask_status_of_order():
+    branch_id= request.args['branch_id']
+    table_id= request.args['table_id']
+    user_id= request.args['user_id']
+
+    order: Order = Order.query.filter(Order.branch_id == branch_id, Order.table_number == table_id, Order.user_id == user_id).one()
+    order_status: OrderStatuses = OrderStatuses(order.status_id)
+
+    return jsonify({'order_status_id': order_status.name})
+
+# Llama al servicio de mesa
+# URL ejemplo: http://127.0.0.1:5000/clients/ask_for_server?branch_id=1&table_id=2
+@bp.route('/ask_for_server')
+def ask_for_server():
+    branch_id= request.args['branch_id']
+    table_id= request.args['table_id']
+
+    return jsonify({'resultado': 'Se ha realizado el llamado al servicio de mesa.'})

@@ -33,7 +33,9 @@ CREATE TABLE Branch
     PhoneNumber    INTEGER NOT NULL,
     LogoUrl        TEXT,
     MenuUrl        TEXT,
-    Mode           INTEGER -- 0 (pickup) o 1 (in-place)
+    Mode           INTEGER, -- 0 (pickup) o 1 (in-place)
+    OwnerId        INTEGER,
+    FOREIGN KEY (OwnerId) REFERENCES User (Id)
 );
 
 CREATE TABLE OrderStatus

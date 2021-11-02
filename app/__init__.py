@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, send_from_directory
 
-from . import api, health, clients_api
+from . import api, health, clients_api, owners_api
 from app.db import management
 
 
@@ -23,6 +23,7 @@ def create_app(test_config=None):
     app.register_blueprint(health.bp)
     app.register_blueprint(api.bp)
     app.register_blueprint(clients_api.bp)
+    app.register_blueprint(owners_api.bp)
 
     @app.route('/<path:path>')
     def static_proxy(path):
