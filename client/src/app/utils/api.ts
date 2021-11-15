@@ -1,7 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {Branches} from "./branches.model";
-import {Observable} from "rxjs";
+import {BranchModel} from "./objects.model";
 
 enum HttpMethod {
   Get = 'GET'
@@ -48,8 +46,8 @@ export const getAppInfo = () => {
 @Injectable()
 export class ClientsApiService{
 
-  public getBranches(): Promise<{ branches: Branches[] }> {
-    return apiGet<{branches: Branches[]}>('/clients/branches');
+  public getBranches(): Promise<{ branches: BranchModel[] }> {
+    return apiGet<{branches: BranchModel[]}>('/clients/branches');
   }
 
 }

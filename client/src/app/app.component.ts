@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ClientsApiService, getAppInfo} from "./utils/api";
-import {Branches} from "./utils/branches.model";
+import {BranchModel} from "./utils/objects.model";
 
 @Component({
   selector: '[id=app-root]',
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   title = 'Nico\'s test'
 
-  branchesList: Branches[] = [];
+  branchesList: BranchModel[] = [];
 
   constructor(private clientsApi: ClientsApiService){
   }
