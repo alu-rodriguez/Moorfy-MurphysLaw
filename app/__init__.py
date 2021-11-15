@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, send_from_directory
 
-from . import api, health, clients_api, owners_api
+from app import health, api, clients_api, owners_api
 from app.db import management
 
 
