@@ -1,3 +1,8 @@
+import {Injectable} from "@angular/core";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {Branches} from "./branches.model";
+import {Observable} from "rxjs";
+
 enum HttpMethod {
   Get = 'GET'
 }
@@ -37,4 +42,14 @@ const apiGet = <T>(path: string) => {
 // Para probar
 export const getAppInfo = () => {
   return apiGet<{name: string}>('/api/app-info');
+}
+
+// Para probar 2
+@Injectable()
+export class ClientsApiService{
+
+  public getBranches(): Promise<{ branches: Branches[] }> {
+    return apiGet<{branches: Branches[]}>('/clients/branches');
+  }
+
 }
