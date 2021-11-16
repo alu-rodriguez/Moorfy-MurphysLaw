@@ -15,6 +15,7 @@ def clients_api_info():
     return jsonify(name='Api para los clientes de restaurantes')
 
 #Devuelve la lista de las sucursales registradas
+# URL ejemplo: http://127.0.0.1:5000/clients/branches
 @bp.route('/branches')
 def branches_list():
     branch_list = Branch.query.all()

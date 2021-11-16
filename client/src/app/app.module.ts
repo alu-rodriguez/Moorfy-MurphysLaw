@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {ClientsApiService} from "./utils/api";
+import {ClientsApiService, OwnersApiService} from "./utils/api";
 
 @NgModule({
   declarations: [
@@ -13,7 +13,7 @@ import {ClientsApiService} from "./utils/api";
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [ClientsApiService],
+  providers: [ClientsApiService, OwnersApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
