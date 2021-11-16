@@ -293,6 +293,30 @@
       visibility: hidden;
     }
   }
+
+  .moorfysTables {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .moorfysTables td, .moorfysTables th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .moorfysTables tr:nth-child(even){background-color: #f2f2f2;}
+
+  .moorfysTables tr:hover {background-color: #ddd;}
+
+  .moorfysTables th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: blueviolet;
+    color: white;
+  }
+
 </style>
 
 <!-- Toolbar -->
@@ -404,20 +428,76 @@
 
 <div style="text-align:center">
   <h1>Sucursales</h1>
-  <h2>Aquí está el listado de sucursales disponibles: </h2>
 </div>
 
-<ul>
-  <li>asdfas</li>
-  <li *ngFor="let branchy of branchesList">
-    {{branchy.name}}
-  </li>
-  <li>asdfas</li>
-</ul>
+<table id="branchesTable" class="moorfysTables">
+  <tr>
+    <th *ngFor="let column of branchesTableHeaders">
+      {{column}}
+    </th>
+  </tr>
+
+  <tr *ngFor="let branchy of branchesList">
+    <td>{{branchy.branch_id}}</td>
+    <td>{{branchy.name}}</td>
+    <td>{{branchy.latitude}}</td>
+    <td>{{branchy.longitude}}</td>
+    <td>{{branchy.number_of_tables}}</td>
+    <td>{{branchy.email}}</td>
+    <td>{{branchy.phone_number}}</td>
+    <td>{{branchy.logo_url}}</td>
+    <td>{{branchy.menu_url}}</td>
+    <td>{{branchy.mode}}</td>
+    <td>{{branchy.owner_id}}</td>
+  </tr>
+</table>
+
+<br><br>
 
 <div style="text-align:center">
-  <h1>Sucursales</h1>
-  <h2>Aquí está el listado de sucursales disponibles: </h2>
+  <h1>Órdenes Activas</h1>
 </div>
+
+<table id="ordersTable" class="moorfysTables">
+  <tr>
+    <th *ngFor="let column of ordersTableHeaders">
+      {{column}}
+    </th>
+  </tr>
+
+  <tr *ngFor="let activeOrders of activeOrdersList">
+    <td>{{activeOrders.order_id}}</td>
+    <td>{{activeOrders.branch_id}}</td>
+    <td>{{activeOrders.user_id}}</td>
+    <td>{{activeOrders.status}}</td>
+    <td>{{activeOrders.content}}</td>
+    <td>{{activeOrders.table_number}}</td>
+    <td>{{activeOrders.timestamp}}</td>
+  </tr>
+</table>
+
+<br><br>
+
+<div style="text-align:center">
+  <h1>Órdenes Históricas</h1>
+</div>
+
+<table id="ordersTable" class="moorfysTables">
+  <tr>
+    <th *ngFor="let column of ordersTableHeaders">
+      {{column}}
+    </th>
+  </tr>
+
+  <tr *ngFor="let historicalOrders of historicalOrdersList">
+    <td>{{historicalOrders.order_id}}</td>
+    <td>{{historicalOrders.branch_id}}</td>
+    <td>{{historicalOrders.user_id}}</td>
+    <td>{{historicalOrders.status}}</td>
+    <td>{{historicalOrders.content}}</td>
+    <td>{{historicalOrders.table_number}}</td>
+    <td>{{historicalOrders.timestamp}}</td>
+  </tr>
+</table>
 
 <router-outlet></router-outlet>

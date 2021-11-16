@@ -61,6 +61,7 @@ class Branch(Base):
 
     def jsonify(self):
         return {
+            'branch_id': self.id,
             'name': self.name,
             'latitude': self.latitude,
             'longitude': self.longitude,
@@ -69,7 +70,8 @@ class Branch(Base):
             'phone_number': self.phone_number,
             'logo_url': self.logo_url,
             'menu_url': self.menu_url,
-            'mode': self.mode
+            'mode': OperationModes(self.mode).name,
+            'owner_id': self.owner_id
         }
 
 
@@ -101,9 +103,11 @@ class Order(Base):
 
     def jsonify(self):
         return {
-            'order_id': id,
-            'table_number': self.table_number,
-            'timestamp': self.selftimestamp,
+            'order_id': self.id,
+            'branch_id': self.branch_id,
+            'user_id': self.branch_id,
+            'status': OrderStatuses(self.status_id).name,
             'content': self.content,
-            'status': OrderStatuses(self.status_id).name
+            'table_number': self.table_number,
+            'timestamp': self.timestamp
         }
