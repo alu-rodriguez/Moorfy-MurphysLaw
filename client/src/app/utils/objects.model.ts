@@ -17,7 +17,7 @@ export class BranchModel {
 
 export class UserModel {
   constructor(
-    public id: number,
+    public user_id: number,
     public first_name: string,
     public last_name: string,
     public password: string,

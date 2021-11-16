@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BranchModel} from "./objects.model";
+import {BranchModel, UserModel} from "./objects.model";
 
 enum HttpMethod {
   Get = 'GET'
@@ -82,7 +82,6 @@ export const getAppInfo = () => {
   return apiGet<{name: string}>('/api/app-info');
 }
 
-// Para probar 2
 @Injectable()
 export class ClientsApiService{
 
@@ -94,7 +93,7 @@ export class ClientsApiService{
   }
 
 }
-// Para probar 2
+
 @Injectable()
 export class OwnersApiService{
 
@@ -104,6 +103,19 @@ export class OwnersApiService{
 
   public getHistoricalOrders(params : string) {
     return apiGetWithParams<{orders: string}[]>('/owners/historical_orders', params);
+  }
+
+}
+
+@Injectable()
+export class GeneralApiService{
+
+  public getABranch(params : string) {
+    return apiGetWithParams<BranchModel>('/api/obtain_a_branch', params);
+  }
+
+  public getRegisteredUsers() {
+    return apiGet<UserModel[]>('/api/usuarios');
   }
 
 }

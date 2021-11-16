@@ -37,6 +37,16 @@ class User(Base):
     email: str = Column('Email', String, nullable=False)
     is_admin: int = Column('IsAdmin', Integer)
 
+    def jsonify(self):
+        return {
+            'user_id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'password': self.password,
+            'email': self.email,
+            'is_admin': self.is_admin
+        }
+
 
 class OperationModes(enum.IntEnum):
     PICK_UP = 0
