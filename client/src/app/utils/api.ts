@@ -15,7 +15,10 @@ const apiFetch = <T>({method, path}: ApiFetchArguments) => {
     method: method,
   };
 
-  return fetch(path, options)
+  const urlBase = 'http://localhost:5000';
+  const url = `${urlBase}${path}`;
+
+  return fetch(url, options)
     .then(response => {
       if (response.ok) {
         return response;

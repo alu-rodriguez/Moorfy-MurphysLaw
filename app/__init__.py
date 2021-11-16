@@ -2,8 +2,9 @@ import os
 
 from flask import Flask, send_from_directory
 
-from app import health, api, clients_api, owners_api
+from . import api, clients_api, health, owners_api
 from app.db import management
+from flask_cors import CORS
 
 
 def create_app(test_config=None):
@@ -24,6 +25,8 @@ def create_app(test_config=None):
     app.register_blueprint(api.bp)
     app.register_blueprint(clients_api.bp)
     app.register_blueprint(owners_api.bp)
+
+    CORS(app)
 
     @app.route('/<path:path>')
     def static_proxy(path):
