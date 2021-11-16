@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   historicalOrdersList: OrderModel[] = [];
 
   // @ts-ignore
-  private branchesListPro: { branches: string }[];
+  private branchesListPro: { branches: BranchModel[] };
   // @ts-ignore
   private activeOrdersListPro: { orders: string }[];
   // @ts-ignore
@@ -36,30 +36,20 @@ export class AppComponent implements OnInit {
     this.title = info.name;
 
     await this.obtainBranchesLists();
+
     await this.obtainActiveOrdersList();
     await this.obtainHistoricalOrdersList();
-    
+
+
+  }
+
+  private async obtainBranchesLists() {
     const branches = await this.clientsApi.getBranches2();
     this.branchesListPro = {
       branches: branches
     }
-    console.log(this.branchesListPro);
     this.branchesList = this.branchesListPro.branches;
     console.log(this.branchesList?.length ?? 0);
-  }
-
-  private async obtainBranchesLists() {
-    this.branchesListPro = await this.clientsApi.getBranches();
-    //console.log(this.branchesListPro);
-    // @ts-ignore
-    //console.log(this.branchesListPro[1]);
-    this.branchesList = [];
-    for (let ii: number = 0; ii < this.branchesListPro.length; ii++) {
-      let unaSucursalString: { branches: string; } = this.branchesListPro[ii];
-      let unaSucursal: BranchModel = this.fromStringToBranchModel(unaSucursalString);
-      this.branchesList.push(unaSucursal);
-    }
-    console.log(this.branchesList);
   }
 
   private async obtainActiveOrdersList() {
