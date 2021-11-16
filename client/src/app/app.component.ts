@@ -34,9 +34,18 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     const info = await getAppInfo();
     this.title = info.name;
+
     await this.obtainBranchesLists();
     await this.obtainActiveOrdersList();
     await this.obtainHistoricalOrdersList();
+    
+    const branches = await this.clientsApi.getBranches2();
+    this.branchesListPro = {
+      branches: branches
+    }
+    console.log(this.branchesListPro);
+    this.branchesList = this.branchesListPro.branches;
+    console.log(this.branchesList?.length ?? 0);
   }
 
   private async obtainBranchesLists() {

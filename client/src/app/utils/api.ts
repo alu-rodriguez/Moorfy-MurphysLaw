@@ -89,6 +89,9 @@ export class ClientsApiService{
   public getBranches() {
     return apiGet<{branches: string}[]>('/clients/branches');
   }
+  public getBranches2(): Promise<BranchModel[]> {
+    return apiGet<BranchModel[]>('/clients/branches');
+  }
 
 }
 // Para probar 2
