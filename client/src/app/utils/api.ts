@@ -92,6 +92,10 @@ export class ClientsApiService{
     return apiGet<BranchModel[]>('/clients/branches');
   }
 
+  public placeAnOrder(params:string){
+    return apiGetWithParams<{response : string}>('/clients/place_an_order',params);
+  }
+
 }
 
 @Injectable()
@@ -116,6 +120,10 @@ export class GeneralApiService{
 
   public getRegisteredUsers() {
     return apiGet<UserModel[]>('/api/usuarios');
+  }
+
+  public getAUser(params : string) {
+    return apiGetWithParams<UserModel>('/api/user/', params);
   }
 
 }
