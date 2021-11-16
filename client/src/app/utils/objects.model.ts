@@ -3,12 +3,12 @@ export class BranchModel {
     public name: string,
     public latitude: number,
     public longitude: number,
-    public number_of_tables: bigint,
+    public number_of_tables: number,
     public email: string,
-    public phone_number: bigint,
+    public phone_number: number,
     public logo_url: string,
     public menu_url: string,
-    public mode: bigint
+    public mode: number
   ) {
   }
 }

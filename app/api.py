@@ -1,6 +1,7 @@
 import logging
 from http import HTTPStatus
 
+
 from flask import Blueprint, jsonify, make_response, current_app, request
 from sqlalchemy.exc import NoResultFound
 
@@ -14,7 +15,7 @@ logger = logging.getLogger()
 # Para testear que funcione el ruteo desde el cliente
 @bp.route('/app-info')
 def app_info():
-    return jsonify(name='ArquiWeb - TP 1')
+    return jsonify(name='este titulo está en el servidor: ArquiWeb - TP 1')
 
 
 # Solo como ejemplo para probar como insertar
