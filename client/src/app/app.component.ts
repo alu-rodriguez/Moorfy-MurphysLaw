@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsApiService, getAppInfo, OwnersApiService} from "./utils/api";
-import {BranchModel, OrderModel} from "./utils/objects.model";
+import {ClientsApiService, GeneralApiService, getAppInfo, OwnersApiService} from "./utils/api";
+import {BranchModel, OrderModel, UserModel} from "./utils/objects.model";
 
 @Component({
   selector: '[id=app-root]',
@@ -11,24 +11,31 @@ export class AppComponent implements OnInit {
 
   title = 'Moorfy\'s test'
 
-  branchesTableHeaders = ["order_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
-      "menu_url", "mode", "owner_id"];
-  ordersTableHeaders = ["name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
-      "menu_url", "mode"];
-  usersTableHeaders = ["id", "first_name", "last_name", "password", "email", "isAdmin"];
+  branchesTableHeaders = ["branch_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
+      "menu_url", "mode","owner_id"];
+  ordersTableHeaders = ["order_id","branch_id", "user_id", "status", "content", "table_number", "timestamp"];
+  usersTableHeaders = ["user_id", "first_name", "last_name", "password", "email", "isAdmin"];
 
   branchesList: BranchModel[] = [];
+  registeredUsersList: UserModel[] = [];
   activeOrdersList: OrderModel[] = [];
   historicalOrdersList: OrderModel[] = [];
 
   // @ts-ignore
   private branchesListPro: { branches: BranchModel[] };
   // @ts-ignore
+  private registeredUsersListPro: { users: UserModel[] };
+  // @ts-ignore
   private activeOrdersListPro: { orders: string }[];
   // @ts-ignore
   private historicalOrdersListPro: { orders: string }[];
 
-  constructor(private clientsApi: ClientsApiService, private ownersApi: OwnersApiService) {
+  selectedBranchId : number = 1;
+  // @ts-ignore
+  selectedBranch : BranchModel;
+
+  constructor(private clientsApi: ClientsApiService, private ownersApi: OwnersApiService,
+              private generalApi: GeneralApiService) {
   }
 
   async ngOnInit() {
@@ -36,11 +43,24 @@ export class AppComponent implements OnInit {
     this.title = info.name;
 
     await this.obtainBranchesLists();
+    await this.obtainRegisteredUsersList();
 
     await this.obtainActiveOrdersList();
     await this.obtainHistoricalOrdersList();
 
 
+  }
+
+  async update(e: Event){
+    // @ts-ignore
+    this.selectedBranchId = e.target.value;
+    await this.obtainActiveOrdersList();
+    await this.obtainHistoricalOrdersList()
+  }
+
+  private async obtainSelectedBranch(){
+    const branch = await this.generalApi.getABranch('?branch_id=' + this.selectedBranchId);
+    this.selectedBranch = branch;
   }
 
   private async obtainBranchesLists() {
@@ -49,35 +69,35 @@ export class AppComponent implements OnInit {
       branches: branches
     }
     this.branchesList = this.branchesListPro.branches;
-    console.log(this.branchesList?.length ?? 0);
+    this.selectedBranch = this.branchesList[1];
+  }
+
+  private async obtainRegisteredUsersList() {
+    const users = await this.generalApi.getRegisteredUsers();
+    this.registeredUsersListPro = {
+      users: users
+    }
+    this.registeredUsersList = this.registeredUsersListPro.users;
   }
 
   private async obtainActiveOrdersList() {
-    this.activeOrdersListPro = await this.ownersApi.getActiveOrders('?branch_id=1');
-    //console.log(this.activeOrdersListPro);
-    // @ts-ignore
-    //console.log(this.activeOrdersListPro[1]);
+    this.activeOrdersListPro = await this.ownersApi.getActiveOrders('?branch_id=' + this.selectedBranchId);
     this.activeOrdersList = [];
     for (let ii: number = 0; ii < this.activeOrdersListPro.length; ii++) {
       let unaOrdenString: { orders: string; } = this.activeOrdersListPro[ii];
       let unaOrden: OrderModel = this.fromStringToOrderModel(unaOrdenString);
       this.activeOrdersList.push(unaOrden);
     }
-    console.log(this.activeOrdersList);
   }
 
   private async obtainHistoricalOrdersList() {
-    this.historicalOrdersListPro = await this.ownersApi.getHistoricalOrders('?branch_id=1');
-    console.log(this.historicalOrdersListPro);
-    // @ts-ignore
-    console.log(this.historicalOrdersListPro[1]);
+    this.historicalOrdersListPro = await this.ownersApi.getHistoricalOrders('?branch_id=' + this.selectedBranchId);
     this.historicalOrdersList = [];
     for (let ii: number = 0; ii < this.historicalOrdersListPro.length; ii++) {
       let unaOrdenString: { orders: string; } = this.historicalOrdersListPro[ii];
       let unaOrden: OrderModel = this.fromStringToOrderModel(unaOrdenString);
       this.historicalOrdersList.push(unaOrden);
     }
-    console.log(this.historicalOrdersList);
   }
 
   protected fromStringToBranchModel (unaSucursalString: { branches: string; }) {

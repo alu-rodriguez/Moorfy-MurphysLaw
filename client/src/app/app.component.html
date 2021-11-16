@@ -455,10 +455,22 @@
 <br><br>
 
 <div style="text-align:center">
-  <h1>Órdenes Activas</h1>
+  <h1>Seleccione la sucursal a chequear las órdenes</h1>
 </div>
 
-<table id="ordersTable" class="moorfysTables">
+<select #cricket (change)="update($event)">
+    <option *ngFor="let branch of branchesList" [value]="branch.branch_id">
+       {{branch.branch_id}} - {{branch.name}}
+    </option>
+</select>
+
+<br><br>
+
+<div style="text-align:center">
+  <h2>Órdenes Activas</h2>
+</div>
+
+<table id="activeOrdersTable" class="moorfysTables">
   <tr>
     <th *ngFor="let column of ordersTableHeaders">
       {{column}}
@@ -479,10 +491,10 @@
 <br><br>
 
 <div style="text-align:center">
-  <h1>Órdenes Históricas</h1>
+  <h2>Órdenes Históricas</h2>
 </div>
 
-<table id="ordersTable" class="moorfysTables">
+<table id="historicalOrdersTable" class="moorfysTables">
   <tr>
     <th *ngFor="let column of ordersTableHeaders">
       {{column}}
@@ -497,6 +509,29 @@
     <td>{{historicalOrders.content}}</td>
     <td>{{historicalOrders.table_number}}</td>
     <td>{{historicalOrders.timestamp}}</td>
+  </tr>
+</table>
+
+<br><br>
+
+<div style="text-align:center">
+  <h2>Usuarios Regsitrados</h2>
+</div>
+
+<table id="registeredUsersTable" class="moorfysTables">
+  <tr>
+    <th *ngFor="let column of usersTableHeaders">
+      {{column}}
+    </th>
+  </tr>
+
+  <tr *ngFor="let users of registeredUsersList">
+    <td>{{users.user_id}}</td>
+    <td>{{users.first_name}}</td>
+    <td>{{users.last_name}}</td>
+    <td>{{users.password}}</td>
+    <td>{{users.email}}</td>
+    <td>{{users.isAdmin}}</td>
   </tr>
 </table>
 
