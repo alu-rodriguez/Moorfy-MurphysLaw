@@ -49,8 +49,8 @@ export const getAppInfo = () => {
 @Injectable()
 export class ClientsApiService{
 
-  public getBranches(): Promise<{ branches: BranchModel[] }> {
-    return apiGet<{branches: BranchModel[]}>('/clients/branches');
+  public getBranches(): Promise<BranchModel[]> {
+    return apiGet<BranchModel[]>('/clients/branches');
   }
 
 }

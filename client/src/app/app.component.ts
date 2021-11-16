@@ -31,10 +31,13 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     const info = await getAppInfo();
     this.title = info.name;
-    this.branchesListPro = await this.clientsApi.getBranches();
+    const branches = await this.clientsApi.getBranches();
+    this.branchesListPro = {
+      branches: branches
+    }
     console.log(this.branchesListPro);
     this.branchesList = this.branchesListPro.branches;
-    console.log(this.branchesList.length);
+    console.log(this.branchesList?.length ?? 0);
   }
 
 
