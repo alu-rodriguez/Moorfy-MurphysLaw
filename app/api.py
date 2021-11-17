@@ -15,7 +15,7 @@ logger = logging.getLogger()
 # Para testear que funcione el ruteo desde el cliente
 @bp.route('/app-info')
 def app_info():
-    return jsonify(name='este titulo está en el servidor: ArquiWeb - TP 1')
+    return jsonify(name='ArquiWeb - TP 1')
 
 
 # Solo como ejemplo para probar como insertar
@@ -53,7 +53,7 @@ def get_user(user_id: int):
 #Devuelve la sucursal según el id del parámetro
 # URL ejemplo: http://127.0.0.1:5000/api/obtain_a_branch?branch_id=1
 @bp.route('/obtain_a_branch')
-def obtainABranch():
+def obtain_a_branch():
     branch_id= request.args['branch_id']
     branch: Branch = Branch.query.filter(Branch.id == branch_id).one()
     Branch.jsonify(branch)
@@ -64,7 +64,7 @@ def obtainABranch():
 #Devuelve la lista de las usuarios registrados
 # URL ejemplo: http://127.0.0.1:5000/api/usuarios
 @bp.route('/usuarios')
-def branches_list():
+def users_list():
     user_list = User.query.all()
     users_response = []
     for u in user_list:

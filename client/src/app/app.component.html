@@ -427,6 +427,12 @@
 <br><br>
 
 <div style="text-align:center">
+  <h2>Welcome logged User {{loggedUser.id}}! How are you today {{loggedUser.first_name}} {{loggedUser.last_name}}?</h2>
+</div>
+
+<br><br>
+
+<div style="text-align:center">
   <h1>Sucursales</h1>
 </div>
 
@@ -445,8 +451,8 @@
     <td>{{branchy.number_of_tables}}</td>
     <td>{{branchy.email}}</td>
     <td>{{branchy.phone_number}}</td>
-    <td>{{branchy.logo_url}}</td>
-    <td>{{branchy.menu_url}}</td>
+    <td><img width="40" alt="logo_url" src={{branchy.logo_url}}></td>
+    <td><a aria-label="menu_url" href={{branchy.menu_url}} title="logo_url">{{branchy.menu_url}}</a></td>
     <td>{{branchy.mode}}</td>
     <td>{{branchy.owner_id}}</td>
   </tr>
@@ -455,14 +461,41 @@
 <br><br>
 
 <div style="text-align:center">
-  <h1>Seleccione la sucursal a chequear las órdenes</h1>
+  <h1>Realice su pedido:</h1>
 </div>
 
-<select #cricket (change)="update($event)">
+<form (ngSubmit)="placeOrder(orderForm)" #orderForm="ngForm" novalidate="">
+<div class="form-group">
+  Usuario:
+  <select #crickett>
+    <option *ngFor="let user of registeredUsersList" [value]="user.id">
+       {{user.id}} - {{user.first_name}} {{user.last_name}}
+    </option>
+  </select>
+  <br>Sucursal:
+  <select #cricket (change)="update($event)">
     <option *ngFor="let branch of branchesList" [value]="branch.branch_id">
        {{branch.branch_id}} - {{branch.name}}
     </option>
-</select>
+  </select>
+  <br><label for="tableNumber">Número de la mesa: *</label>
+  <input type="number" class="form-control" id="tableNumber" required [(ngModel)]="orderContent" name="tableNumber" #name="ngModel"
+    minlength="5" size="10">
+  <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+    <div *ngIf="name.errors?.required">
+      Este campo es requerido.
+    </div>
+  </div>
+  <br><label for="orderContent">Contenido de la orden: *</label>
+  <input type="text" class="form-control" id="orderContent" required [(ngModel)]="branchTableOrderId" name="orderContent" #name="ngModel"
+         minlength="5" size="200">
+  <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+    <div *ngIf="name.errors?.required">
+      Este campo es requerido.
+    </div>
+  </div>
+  <br><input type="submit">
+</div>
 
 <br><br>
 
@@ -491,6 +524,31 @@
 <br><br>
 
 <div style="text-align:center">
+  <h3>Aceptar una orden:</h3>
+</div>
+
+<form (ngSubmit)="changeStatusOrder(changeStatusOrderForm)" #changeStatusOrderForm="ngForm" novalidate="">
+<div class="form-group">
+  Orden a transicionar:
+  <select #crickett (change)="updateSelectedOrder($event)">
+    <option *ngFor="let order of activeOrdersList" [value]="order.order_id">
+       Orden {{order.order_id}} - Mesa {{order.table_number}} - {{order.status}}
+    </option>
+  </select>
+  <div> <label>Acción</label></div>
+  <div class="custom-control custom-radio custom-control-inline" *ngFor="let anAction of orderActions">
+    <input type="radio" id="action" [(ngModel)]="selectedOrderAction" [value]="anAction" name="action" class="custom-control-input"
+     (change)="updateSelectedOrderAction($event)">
+    <label class="custom-control-label" for="action">{{anAction}}</label>
+  </div>
+  <br><input type="submit">
+</div>
+
+<br><br>
+
+<br><br>
+
+<div style="text-align:center">
   <h2>Órdenes Históricas</h2>
 </div>
 
@@ -515,7 +573,7 @@
 <br><br>
 
 <div style="text-align:center">
-  <h2>Usuarios Regsitrados</h2>
+  <h1>Usuarios Registrados</h1>
 </div>
 
 <table id="registeredUsersTable" class="moorfysTables">
@@ -526,13 +584,15 @@
   </tr>
 
   <tr *ngFor="let users of registeredUsersList">
-    <td>{{users.user_id}}</td>
+    <td>{{users.id}}</td>
     <td>{{users.first_name}}</td>
     <td>{{users.last_name}}</td>
     <td>{{users.password}}</td>
     <td>{{users.email}}</td>
-    <td>{{users.isAdmin}}</td>
+    <td>{{users.is_admin}}</td>
   </tr>
 </table>
+
+<br><br>
 
 <router-outlet></router-outlet>

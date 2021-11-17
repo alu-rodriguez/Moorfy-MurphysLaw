@@ -17,12 +17,12 @@ export class BranchModel {
 
 export class UserModel {
   constructor(
-    public user_id: number,
+    public id: number,
     public first_name: string,
     public last_name: string,
     public password: string,
     public email: string,
-    public isAdmin: number
+    public is_admin: number
   ) {
   }
 }
