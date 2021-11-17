@@ -109,6 +109,26 @@ export class OwnersApiService{
     return apiGetWithParams<{orders: string}[]>('/owners/historical_orders', params);
   }
 
+  public createABranch(params:string){
+    return apiGetWithParams<{response : string}>('/owners/create_a_branch',params);
+  }
+
+  public aceptAnOrder(params:string){
+    return apiGetWithParams<{response : string}>('/owners/acept_order',params);
+  }
+
+  public rejectAnOrder(params:string){
+    return apiGetWithParams<{response : string}>('/owners/reject_order',params);
+  }
+
+  public startMakingAnOrder(params:string){
+    return apiGetWithParams<{response : string}>('/owners/start_making_order',params);
+  }
+
+  public finaliceAnOrder(params:string){
+    return apiGetWithParams<{response : string}>('/owners/finalize_order',params);
+  }
+
 }
 
 @Injectable()

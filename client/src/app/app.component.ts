@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
       "menu_url", "mode","owner_id"];
   ordersTableHeaders = ["order_id","branch_id", "user_id", "status", "content", "table_number", "timestamp"];
   usersTableHeaders = ["user_id", "first_name", "last_name", "password", "email", "isAdmin"];
+  orderActions = ['Aceptar','Rechazar','Iniciar', 'Finalizar']
 
   branchesList: BranchModel[] = [];
   registeredUsersList: UserModel[] = [];
@@ -35,6 +36,8 @@ export class AppComponent implements OnInit {
   private loggedUserPro : { user : UserModel};
 
   selectedBranchId : number = 1;
+  selectedOrderId : number = 0;
+  selectedOrderAction : string = this.orderActions[0];
   // @ts-ignore
   selectedBranch : BranchModel;
   // @ts-ignore
@@ -62,7 +65,7 @@ export class AppComponent implements OnInit {
   }
 
   async placeOrder(f: Form){
-    console.log("se envió el formulario");
+    console.log("se envió el formulario de realizar pedido");
     console.log(f);
     //# URL ejemplo: http://127.0.0.1:5000/clients/place_an_order?branch_id=1&table_id=2&user_id=3&order_content=Pido%20la%20promo%204
     const resultado = await this.clientsApi.placeAnOrder('?branch_id=' + this.selectedBranchId +
@@ -72,11 +75,45 @@ export class AppComponent implements OnInit {
     console.log(resultado);
   }
 
+  async changeStatusOrder(f: Form){
+    console.log("se envió el formulario de aceptar orden");
+    console.log(f);
+    let resultado;
+    if(this.selectedOrderAction = 'Aceptar') {
+      console.log("se procede a aceptar la orden");
+      //# Ejemplo url: http://127.0.0.1:5000/owners/acept_order?order_id=1
+      resultado = await this.ownersApi.aceptAnOrder('?order_id=' + this.selectedOrderId );
+    } else if (this.selectedOrderAction = 'Rechazar'){
+      resultado = await this.ownersApi.rejectAnOrder('?order_id=' + this.selectedOrderId );
+    } else if (this.selectedOrderAction = 'Iniciar'){
+      resultado = await this.ownersApi.startMakingAnOrder('?order_id=' + this.selectedOrderId );
+    } else if (this.selectedOrderAction = 'Finalizar'){
+      resultado = await this.ownersApi.finaliceAnOrder('?order_id=' + this.selectedOrderId );
+    } else {
+      resultado = {'error': 'no se seleccionó una opción correcta'};
+    }
+    console.log("terminó el llamado y el resultado fue: ");
+    console.log(resultado);
+  }
+
   async update(e: Event){
     // @ts-ignore
     this.selectedBranchId = e.target.value;
     await this.obtainActiveOrdersList();
     await this.obtainHistoricalOrdersList()
+  }
+
+  async updateSelectedOrder(e: Event){
+    // @ts-ignore
+    this.selectedOrderId = e.target.value;
+  }
+
+  async updateSelectedOrderAction(e: Event){
+    console.log('se cambio la seleccion de orden');
+    // @ts-ignore
+    console.log(e.target.value);
+    // @ts-ignore
+    this.selectedOrderAction = e.target.value;
   }
 
   private async obtainSelectedBranch(){
