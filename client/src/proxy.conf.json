@@ -2,5 +2,13 @@
   "/api": {
     "target": "http://localhost:5000",
     "secure": false
+  },
+  "/clients": {
+    "target": "http://localhost:5000",
+    "secure": false
+  },
+  "/owners": {
+    "target": "http://localhost:5000",
+    "secure": false
   }
 }
