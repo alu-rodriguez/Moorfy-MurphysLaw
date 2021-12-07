@@ -22,6 +22,16 @@ Para ejecutarlo en modo desarrollo, puede ejecutarse
 ```bash
 export FLASK_APP=app && export FLASK_ENV=development && flask run
 ```
+```cmd
+set FLASK_APP=app
+set FLASK_ENV=development
+flask run
+```
+```Power Shell
+$env:FLASK_APP = "app"
+$env:FLASK_ENV = "development"
+python -m flask run
+```
 desde la raíz del proyecto.
 Para correrlo en modo producción, reemplazar el valor de `FLASK_ENV` por `production`.
 
@@ -32,6 +42,18 @@ __Nota:__ si se usa *PyCharm Professional*, [esto puede ayudar](https://www.jetb
 
 Se proveen los siguientes comandos, que deben ser ejecutados en la raíz del proyecto.
 
+```bash
 * `flask init-db` crea la base de datos.
 * `flask populate-db` inserta un conjunto de datos de prueba.
+```
+
+```Power Shell
+* `python -m flask init-db` crea la base de datos.
+* `python -m flask populate-db` inserta un conjunto de datos de prueba.
+```
+
+Para producción:
+
+export FLASK_APP=app && export FLASK_ENV=production
+
 
