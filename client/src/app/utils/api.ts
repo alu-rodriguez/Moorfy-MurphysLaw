@@ -39,7 +39,7 @@ const apiFetchWithParams = <T>({method, path, params}: ApiFetchArgumentsWitParam
     method: method,
   };
 
-  const urlBase = 'http://localhost:5000';
+  const urlBase = 'http://moorfy.com:5000';
   const url = `${urlBase}${path}${params}`;
 
   return fetch(url, options)
