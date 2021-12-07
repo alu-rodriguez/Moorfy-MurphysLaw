@@ -21,7 +21,7 @@ const apiFetch = <T>({method, path}: ApiFetchArguments) => {
     method: method,
   };
 
-  const urlBase = 'http://localhost:5000';
+  const urlBase = 'http://moorfy.com:5000';
   const url = `${urlBase}${path}`;
 
   return fetch(url, options)
