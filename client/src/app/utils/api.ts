@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import { environment } from "src/environments/environment";
-import {BranchModel, RestaruranteModel, UserModel} from "./objects.model";
-import { RestauranteToBranchTranslator } from "./objects.translator";
+import {BranchModel, RestauranteModel, UserModel, RestaurantItemsModel, RestaurantModel} from "./objects.model";
+import { RestauranteToBranchTranslator, RestaurantToBranchTranslator } from "./objects.translator";
 
 enum HttpMethod {
   Get = 'GET',
@@ -26,38 +26,34 @@ enum WebAppsNames {
   appId2 = 'arquiweb-tp1'
 }
 
-const apiFetch = <T>({method, path}: ApiFetchArguments, urlBase: String) => {
+const apiFetch = async <T>({method, path}: ApiFetchArguments, urlBase: String) => {
   const options: RequestInit = {
     method: method,
   };
 
   const url = `${urlBase}${path}`;
 
-  return fetch(url, options)
-    .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        throw new Error(response.statusText);
-      }
-    })
+  const response = await fetch(url, options);
+  if (response.ok) {
+    return response;
+  } else {
+    throw new Error(response.statusText);
+  }
 }
 
-const apiFetchWithParams = <T>({method, path, params}: ApiFetchArgumentsWitParams, urlBase: String) => {
+const apiFetchWithParams = async <T>({method, path, params}: ApiFetchArgumentsWitParams, urlBase: String) => {
   const options: RequestInit = {
     method: method,
   };
 
   const url = `${urlBase}${path}${params}`;
 
-  return fetch(url, options)
-    .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        throw new Error(response.statusText);
-      }
-    })
+  const response = await fetch(url, options);
+  if (response.ok) {
+    return response;
+  } else {
+    throw new Error(response.statusText);
+  }
 }
 
 const fetchAndParseResponse = async <T>(args: ApiFetchArguments, urlBase: String) => {
@@ -136,20 +132,31 @@ export class SharedAppsApiService{
   public async getBranches() {
     let ourBranches : BranchModel[] = await this.clientsApi.getBranches();
     let app1Branches : BranchModel[] = await this.getApp1Branches();
-    //let app2Branches : BranchModel[] = await this.app2Api.getBranches();
+    let app2Branches : BranchModel[] = await this.getApp2Branches();
 
     let allBranches : BranchModel[] = [];
-    return allBranches.concat(ourBranches).concat(app1Branches);//.concat(app2Branches);
+    return allBranches.concat(ourBranches).concat(app1Branches).concat(app2Branches);
   }
 
   private async getApp1Branches(): Promise<BranchModel[]> {
-    let app1Restaurantes: RestaruranteModel[] = await this.app1Api.getRestaurantes();
+    let app1Restaurantes: RestauranteModel[] = await this.app1Api.getRestaurantes();
     let app1Branches: BranchModel[] = [];
     for(let i = 0; i < app1Restaurantes.length; i++) {
       let aBranch: BranchModel = RestauranteToBranchTranslator.translate(app1Restaurantes[i]);
       app1Branches.push(aBranch);
     }
     return app1Branches;
+  }
+
+  private async getApp2Branches(): Promise<BranchModel[]> {
+    let app2RestaurantItems: RestaurantItemsModel = await this.app2Api.getRestaurants();
+    let app2Restaurants : RestaurantModel[] = app2RestaurantItems.items;
+    let app2Branches: BranchModel[] = [];
+    for(let i = 0; i < app2Restaurants.length; i++) {
+      let aBranch: BranchModel = RestaurantToBranchTranslator.translate(app2Restaurants[i]);
+      app2Branches.push(aBranch);
+    }
+    return app2Branches;
   }
 }
 
@@ -174,8 +181,8 @@ export class ClientsApiService{
 @Injectable()
 export class App1ApiService{
 
-  public getRestaurantes(): Promise<RestaruranteModel[]> {
-    return apiGet<RestaruranteModel[]>('/restaurantes/', environment.app1BaseURL);
+  public getRestaurantes(): Promise<RestauranteModel[]> {
+    return apiGet<RestauranteModel[]>('/restaurantes/', environment.app1BaseURL);
   }
 
 }
@@ -183,11 +190,8 @@ export class App1ApiService{
 @Injectable()
 export class App2ApiService{
 
-  public getBranches(): Promise<BranchModel[]> {
-    let app2Restaurants = apiGet<BranchModel[]>('/api/restaurants', environment.app2BaseURL);
-    //let app2Branches: Promise<BranchModel[]>;
-    //return app2Branches;
-    return apiGet<BranchModel[]>('/clients/branches', environment.ourBaseURL);
+  public getRestaurants(): Promise<RestaurantItemsModel> {
+    return apiGet<RestaurantItemsModel>('/api/restaurants', environment.app2BaseURL);
   }
 
 }

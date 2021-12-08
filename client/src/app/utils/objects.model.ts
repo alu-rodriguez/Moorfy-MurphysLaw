@@ -16,7 +16,7 @@ export class BranchModel {
   }
 }
 
-export class RestaruranteModel {
+export class RestauranteModel {
   constructor(
     public id: number,
     public name: string,
@@ -25,6 +25,38 @@ export class RestaruranteModel {
     public phoneNumber: number,
     public workingHours: number,
     public appId: number
+  ) {
+  }
+}
+
+export class RestaurantItemsModel {
+  constructor(
+    public items: RestaurantModel[]
+  ){
+  }
+}
+
+
+export class RestaurantModel {
+  constructor(
+    public id: number,
+    public name: string,
+    public description: string,
+    public latitude: number,
+    public longitude: number,
+    public has_pickup: boolean,
+    public menu_link: string,
+    public order_link: string,
+    public appId: number,
+    public tables: RestaurantTableModel[]
+  ) {
+  }
+}
+
+export class RestaurantTableModel {
+  constructor(
+    public id: number,
+    public name: string
   ) {
   }
 }
