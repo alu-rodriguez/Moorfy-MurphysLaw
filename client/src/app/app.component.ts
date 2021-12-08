@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsApiService, GeneralApiService, getAppInfo, OwnersApiService} from "./utils/api";
+import {ClientsApiService, GeneralApiService, getAppInfo, OwnersApiService, SharedAppsApiService} from "./utils/api";
 import {BranchModel, OrderModel, UserModel} from "./utils/objects.model";
 import {Form} from "@angular/forms";
-import {flush} from "@angular/core/testing";
 
 @Component({
   selector: '[id=app-root]',
@@ -13,7 +12,7 @@ export class AppComponent implements OnInit {
 
   title = 'Moorfy\'s test'
 
-  branchesTableHeaders = ["branch_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
+  branchesTableHeaders = ["appId", "branch_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
       "menu_url", "mode","owner_id"];
   ordersTableHeaders = ["order_id","branch_id", "user_id", "status", "content", "table_number", "timestamp"];
   usersTableHeaders = ["user_id", "first_name", "last_name", "password", "email", "isAdmin"];
@@ -40,14 +39,16 @@ export class AppComponent implements OnInit {
   selectedOrderAction : string = this.orderActions[0];
   // @ts-ignore
   selectedBranch : BranchModel;
-  // @ts-ignore
-  loggedUser : UserModel;
   orderContent : string = '';
   // @ts-ignore
   branchTableOrderId : number;
 
+  loggedUserId : string = '3';
+  // @ts-ignore
+  loggedUser : UserModel;
+
   constructor(private clientsApi: ClientsApiService, private ownersApi: OwnersApiService,
-              private generalApi: GeneralApiService) {
+              private generalApi: GeneralApiService, private sharedApi: SharedAppsApiService) {
   }
 
   async ngOnInit() {
@@ -122,7 +123,7 @@ export class AppComponent implements OnInit {
   }
 
   private async obtainLoggedUser() {
-    const user = await this.generalApi.getAUser('1');
+    const user = await this.generalApi.getAUser(this.loggedUserId);
     this.loggedUserPro = {
       user: user
     }
@@ -130,7 +131,7 @@ export class AppComponent implements OnInit {
   }
 
   private async obtainBranchesLists() {
-    const branches = await this.clientsApi.getBranches2();
+    const branches = await this.sharedApi.getBranches();
     this.branchesListPro = {
       branches: branches
     }

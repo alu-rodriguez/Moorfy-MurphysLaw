@@ -9,8 +9,22 @@ export class BranchModel {
     public phone_number: number,
     public logo_url: string,
     public menu_url: string,
-    public mode: number,
-    public owner_id: number
+    public mode: string,
+    public owner_id: number,
+    public appId: number
+  ) {
+  }
+}
+
+export class RestaruranteModel {
+  constructor(
+    public id: number,
+    public name: string,
+    public latitude: number,
+    public longitude: number,
+    public phoneNumber: number,
+    public workingHours: number,
+    public appId: number
   ) {
   }
 }

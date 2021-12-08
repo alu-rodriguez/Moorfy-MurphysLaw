@@ -1,2 +1,2 @@
-SERVER_NAME="moorfy.com.ar"
+SERVER_NAME="moorfy.com"
 DEBUG=False

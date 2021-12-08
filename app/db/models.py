@@ -68,6 +68,7 @@ class Branch(Base):
     menu_url: str = Column('MenuUrl', String, nullable=False)
     mode: str = Column('Mode', Enum(OperationModes), nullable=False)
     owner_id: int = Column('OwnerId', Integer, nullable=False)
+    app_id: int = Column('AppId', Integer, nullable=False)
 
     def jsonify(self):
         return {
@@ -81,7 +82,8 @@ class Branch(Base):
             'logo_url': self.logo_url,
             'menu_url': self.menu_url,
             'mode': OperationModes(self.mode).name,
-            'owner_id': self.owner_id
+            'owner_id': self.owner_id,
+            'appId': self.app_id
         }
 
 

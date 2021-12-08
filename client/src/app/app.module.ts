@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {ClientsApiService, GeneralApiService, OwnersApiService} from "./utils/api";
+import {ClientsApiService, GeneralApiService, OwnersApiService, SharedAppsApiService, App1ApiService, App2ApiService} from "./utils/api";
 import {FormsModule} from "@angular/forms";
 
 @NgModule({
@@ -15,7 +15,7 @@ import {FormsModule} from "@angular/forms";
         AppRoutingModule,
         FormsModule
     ],
-  providers: [ClientsApiService, OwnersApiService, GeneralApiService],
+  providers: [ClientsApiService, OwnersApiService, GeneralApiService, SharedAppsApiService, App1ApiService, App2ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,13 +10,13 @@ bp = Blueprint('clients_api', __name__, url_prefix='/clients')
 logger = logging.getLogger()
 
 # Para testear que funcione el ruteo desde el cliente
-@bp.route('/api-info')
+@bp.route('/api-info', methods=['GET'])
 def clients_api_info():
     return jsonify(name='Api para los clientes de restaurantes')
 
 #Devuelve la lista de las sucursales registradas
 # URL ejemplo: http://127.0.0.1:5000/clients/branches
-@bp.route('/branches')
+@bp.route('/branches', methods=['GET'])
 def branches_list():
     branch_list = Branch.query.all()
     branches_response = []
@@ -27,7 +27,7 @@ def branches_list():
 
 # Genera la orden en la base
 # URL ejemplo: http://127.0.0.1:5000/clients/place_an_order?branch_id=1&table_id=2&user_id=3&order_content=Pido%20la%20promo%204
-@bp.route('/place_an_order')
+@bp.route('/place_an_order', methods=['POST'])
 def place_an_order():
     branch_id= request.args['branch_id']
     table_id= request.args['table_id']
@@ -50,7 +50,7 @@ def place_an_order():
 
 # Devuelve la url del menu de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/clients/ask_for_menu?branch_id=2
-@bp.route('/ask_for_menu')
+@bp.route('/ask_for_menu', methods=['GET'])
 def ask_for_menu():
     branch_menu_id = request.args['branch_id']
     branch: Branch = Branch.query.filter(Branch.id == branch_menu_id).one()
@@ -59,7 +59,7 @@ def ask_for_menu():
 
 # Genera la orden en la base
 # URL ejemplo: http://127.0.0.1:5000/clients/ask_status_of_order?branch_id=1&table_id=2&user_id=3
-@bp.route('/ask_status_of_order')
+@bp.route('/ask_status_of_order', methods=['GET'])
 def ask_status_of_order():
     branch_id= request.args['branch_id']
     table_id= request.args['table_id']
@@ -72,7 +72,7 @@ def ask_status_of_order():
 
 # Llama al servicio de mesa
 # URL ejemplo: http://127.0.0.1:5000/clients/ask_for_server?branch_id=1&table_id=2
-@bp.route('/ask_for_server')
+@bp.route('/ask_for_server', methods=['PUT'])
 def ask_for_server():
     branch_id= request.args['branch_id']
     table_id= request.args['table_id']

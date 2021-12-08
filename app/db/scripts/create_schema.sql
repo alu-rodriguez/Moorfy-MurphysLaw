@@ -35,6 +35,7 @@ CREATE TABLE Branch
     MenuUrl        TEXT,
     Mode           INTEGER, -- 0 (pickup) o 1 (in-place)
     OwnerId        INTEGER,
+    AppId          INTEGER,
     FOREIGN KEY (OwnerId) REFERENCES User (Id)
 );
 
