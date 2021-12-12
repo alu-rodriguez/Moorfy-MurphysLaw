@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ClientsApiService, GeneralApiService, getAppInfo, OwnersApiService} from "./utils/api";
+import {ClientsApiService, GeneralApiService, getAppInfo, OwnersApiService, SharedAppsApiService} from "./utils/api";
 import {BranchModel, OrderModel, UserModel} from "./utils/objects.model";
-import {Form} from "@angular/forms";
-import {flush} from "@angular/core/testing";
+import {Form, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: '[id=app-root]',
@@ -13,7 +12,7 @@ export class AppComponent implements OnInit {
 
   title = 'Moorfy\'s test'
 
-  branchesTableHeaders = ["branch_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
+  branchesTableHeaders = ["appId", "branch_id","name", "latitude", "longitude", "number_of_tables", "email", "phone_number", "logo_url",
       "menu_url", "mode","owner_id"];
   ordersTableHeaders = ["order_id","branch_id", "user_id", "status", "content", "table_number", "timestamp"];
   usersTableHeaders = ["user_id", "first_name", "last_name", "password", "email", "isAdmin"];
@@ -23,6 +22,9 @@ export class AppComponent implements OnInit {
   registeredUsersList: UserModel[] = [];
   activeOrdersList: OrderModel[] = [];
   historicalOrdersList: OrderModel[] = [];
+  private appsListMap: { [appId: number]: string }[] =  [{1:'ver-la-carta'}, {2: 'arquiweb-tp1'}, {3: 'moorfy'}];
+  private appsMap: { [appId: number]: string } = {1:'ver-la-carta', 2: 'arquiweb-tp1', 3: 'moorfy'};
+  appsList: string[] = [];
 
   // @ts-ignore
   private branchesListPro: { branches: BranchModel[] };
@@ -35,42 +37,64 @@ export class AppComponent implements OnInit {
   // @ts-ignore
   private loggedUserPro : { user : UserModel};
 
-  selectedBranchId : number = 1;
+  selectedBranchId : number = 0;
   selectedOrderId : number = 0;
-  selectedOrderAction : string = this.orderActions[0];
+  selectedOrderAction : string = '';
   // @ts-ignore
   selectedBranch : BranchModel;
+  selectedUserId : string = '';
+  // @ts-ignore
+  selectedUser : UserModel;
+  selectedApp : string = '';
+  selectedAppBranches : BranchModel[] = [];
+
+  loggedUserId : string = '';
   // @ts-ignore
   loggedUser : UserModel;
+
+  branchTableOrderId : number = 0;
   orderContent : string = '';
-  // @ts-ignore
-  branchTableOrderId : number;
 
   constructor(private clientsApi: ClientsApiService, private ownersApi: OwnersApiService,
-              private generalApi: GeneralApiService) {
+    private generalApi: GeneralApiService, private sharedApi: SharedAppsApiService) {
+
+      this.selectedOrderAction = this.orderActions[0];
+      this.loggedUserId = "3";
+      this.obtainApps();
+
+      this.ngOnInit();
   }
+
+  private obtainApps() {
+    this.appsList = [];
+    for(let i = 0; i < this.appsListMap.length; i++){
+      this.appsList.push(this.appsListMap[i][i+1]);
+    }
+    this.selectedApp = this.appsList[0];
+  }
+
+  // @ts-ignore
+  placeOrderForm: FormGroup;
 
   async ngOnInit() {
     const info = await getAppInfo();
     this.title = info.name;
 
-    await this.obtainBranchesLists();
-    await this.obtainRegisteredUsersList();
-    await this.obtainLoggedUser();
+    await this.obtainUsers();
+    await this.obtainBranches();
+    await this.obtainOrders();
+    await this.obtainHistoricalOrders();
+    await this.obtainLoggedUser(this.loggedUserId);
 
-    await this.obtainActiveOrdersList();
-    await this.obtainHistoricalOrdersList();
-
-
+    this.placeOrderForm = new FormGroup({
+      userName: new FormControl()
+    });
   }
 
   async placeOrder(f: Form){
     console.log("se envió el formulario de realizar pedido");
     console.log(f);
-    //# URL ejemplo: http://127.0.0.1:5000/clients/place_an_order?branch_id=1&table_id=2&user_id=3&order_content=Pido%20la%20promo%204
-    const resultado = await this.clientsApi.placeAnOrder('?branch_id=' + this.selectedBranchId +
-                        '&table_id=' + this.branchTableOrderId + '&user_id=' + this.loggedUser.id +
-                        '&order_content=' + this.orderContent);
+    const resultado = await this.sharedApi.placeAnOrder(this.selectedBranch, this.branchTableOrderId, this.selectedUser, this.orderContent);
     console.log("se realizó el pedido");
     console.log(resultado);
   }
@@ -96,12 +120,12 @@ export class AppComponent implements OnInit {
     console.log(resultado);
   }
 
-  async update(e: Event){
+  //async update(e: Event){
     // @ts-ignore
-    this.selectedBranchId = e.target.value;
-    await this.obtainActiveOrdersList();
-    await this.obtainHistoricalOrdersList()
-  }
+  //  this.selectedBranchId = e.target.value;
+  //  await this.obtainActiveOrdersList();
+  //  await this.obtainHistoricalOrdersList()
+  //}
 
   async updateSelectedOrder(e: Event){
     // @ts-ignore
@@ -116,34 +140,79 @@ export class AppComponent implements OnInit {
     this.selectedOrderAction = e.target.value;
   }
 
-  private async obtainSelectedBranch(){
-    const branch = await this.generalApi.getABranch('?branch_id=' + this.selectedBranchId);
-    this.selectedBranch = branch;
+  public async updateSelectedBranch(e: Event){
+    // @ts-ignore
+    this.selectedBranchId = e.target.value;
+    //const branch = await this.generalApi.getABranch('?branch_id=' + this.selectedBranchId);
+    let notFound = true;
+    let i = 0;
+    while(notFound && i < this.selectedAppBranches.length){
+      let branch = this.selectedAppBranches[i];
+      if(this.appsMap[branch.appId] == this.selectedApp && branch.branch_id == this.selectedBranchId){
+        this.selectedBranch = branch;
+        notFound = false;
+      }
+      i++;
+    }
   }
 
-  private async obtainLoggedUser() {
-    const user = await this.generalApi.getAUser('1');
+  private async obtainLoggedUser(userId: string) {
+    const user = await this.generalApi.getAUser(userId);
     this.loggedUserPro = {
       user: user
     }
     this.loggedUser = this.loggedUserPro.user;
   }
 
-  private async obtainBranchesLists() {
-    const branches = await this.clientsApi.getBranches2();
+  public async updateSelectedUser(e: Event) {
+    // @ts-ignore
+    this.selectedUserId = e.target.value;
+    const user = await this.generalApi.getAUser(this.selectedUserId);
+    this.loggedUserPro = {
+      user: user
+    }
+    this.selectedUser = this.loggedUserPro.user;
+  }
+
+  public updateSelectedApp(e: Event) {
+    // @ts-ignore
+    let newSelectedApp = e.target.value;
+    if (this.selectedApp != newSelectedApp) {
+      this.selectedApp = newSelectedApp;
+      this.updateSelectedAppBranches();
+    }
+  }
+
+  private updateSelectedAppBranches() {
+    this.selectedAppBranches = [];
+    for(let i = 0; i < this.branchesList.length; i++){
+      let branchAppId = this.branchesList[i].appId;
+      let branchAppName = this.appsMap[branchAppId];
+      if(branchAppName == this.selectedApp){
+        this.selectedAppBranches.push(this.branchesList[i]);
+      }
+    }
+    this.selectedBranch = this.selectedAppBranches[0];
+    this.selectedBranchId = this.selectedBranch.appId;
+  }
+
+  private async obtainBranches() {
+    const branches = await this.sharedApi.getBranches();
     this.branchesListPro = {
       branches: branches
     }
     this.branchesList = this.branchesListPro.branches;
-    this.selectedBranch = this.branchesList[1];
+    this.updateSelectedAppBranches();
   }
 
-  private async obtainRegisteredUsersList() {
+  private async obtainUsers() {
     const users = await this.generalApi.getRegisteredUsers();
     this.registeredUsersListPro = {
       users: users
     }
     this.registeredUsersList = this.registeredUsersListPro.users;
+    this.selectedUser = this.registeredUsersList[0];
+    this.selectedUserId = this.selectedUser.id.toString();
   }
 
   private async obtainActiveOrdersList2() {
@@ -156,7 +225,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private async obtainActiveOrdersList() {
+  private async obtainOrders() {
     this.activeOrdersListPro = await this.ownersApi.getActiveOrders('?branch_id=' + this.selectedBranchId);
     this.activeOrdersList = [];
     for (let ii: number = 0; ii < this.activeOrdersListPro.length; ii++) {
@@ -164,9 +233,10 @@ export class AppComponent implements OnInit {
       let unaOrden: OrderModel = this.fromStringToOrderModel(unaOrdenString);
       this.activeOrdersList.push(unaOrden);
     }
+    this.selectedOrderId = this.activeOrdersList[0].order_id;
   }
 
-  private async obtainHistoricalOrdersList() {
+  private async obtainHistoricalOrders() {
     this.historicalOrdersListPro = await this.ownersApi.getHistoricalOrders('?branch_id=' + this.selectedBranchId);
     this.historicalOrdersList = [];
     for (let ii: number = 0; ii < this.historicalOrdersListPro.length; ii++) {
@@ -193,4 +263,5 @@ export class AppComponent implements OnInit {
       timestamp : string = unaOrdenString.timestamp;
     return new OrderModel(order_id, branch_id, user_id, status, content, table_number, timestamp);
   }
+
 }

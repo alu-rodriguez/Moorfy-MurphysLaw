@@ -13,7 +13,7 @@ logger = logging.getLogger()
 
 
 # Para testear que funcione el ruteo desde el cliente
-@bp.route('/app-info')
+@bp.route('/app-info', methods=['GET'])
 def app_info():
     return jsonify(name='ArquiWeb - TP 1')
 
@@ -40,7 +40,7 @@ def create_user():
 
 # Devuelve el usuario seleccionado
 # URL ejemplo: http://127.0.0.1:5000/api/user/1
-@bp.route('/user/<int:user_id>')
+@bp.route('/user/<int:user_id>', methods=['GET'])
 def get_user(user_id: int):
     try:
         return jsonify(User.query.filter(User.id == user_id).one())
@@ -52,7 +52,7 @@ def get_user(user_id: int):
 
 #Devuelve la sucursal según el id del parámetro
 # URL ejemplo: http://127.0.0.1:5000/api/obtain_a_branch?branch_id=1
-@bp.route('/obtain_a_branch')
+@bp.route('/obtain_a_branch', methods=['GET'])
 def obtain_a_branch():
     branch_id= request.args['branch_id']
     branch: Branch = Branch.query.filter(Branch.id == branch_id).one()
@@ -63,7 +63,7 @@ def obtain_a_branch():
 
 #Devuelve la lista de las usuarios registrados
 # URL ejemplo: http://127.0.0.1:5000/api/usuarios
-@bp.route('/usuarios')
+@bp.route('/usuarios', methods=['GET'])
 def users_list():
     user_list = User.query.all()
     users_response = []

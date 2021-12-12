@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  ourBaseURL: "http://localhost:5000",
+  app1BaseURL: "http://ver-la-carta.herokuapp.com",
+  app2BaseURL: "http://arquiweb-tp1.herokuapp.com"
 };
 
 /*
