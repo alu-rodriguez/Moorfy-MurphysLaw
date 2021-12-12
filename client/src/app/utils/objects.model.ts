@@ -85,3 +85,32 @@ export class OrderModel {
   ) {
   }
 }
+
+export abstract class BodyModel {
+  abstract stringify(): string;
+}
+
+export class OrderSolicitudeApp1Model implements BodyModel {
+  constructor(
+    public content: string,
+    public clientName: string
+  ) {
+  }
+
+  stringify(): string {
+    return '{"content": "' + this.content + '", "clientName": "' + this.clientName + '"}';
+  }
+}
+
+export class OrderSolicitudeApp2Model implements BodyModel {
+  constructor(
+    public table_id: number,
+    public order_text: string
+  ) {
+  }
+
+  stringify(): string {
+    return '{"table_id": ' + this.table_id + ', "order_text": "' + this.order_text + '"}';
+  }
+}
+

@@ -427,7 +427,7 @@
 <br><br>
 
 <div style="text-align:center">
-  <h2>Welcome logged User {{loggedUser.id}}! How are you today {{loggedUser.first_name}} {{loggedUser.last_name}}?</h2>
+  <h2>¡Bienvenido! ¡Esperamos disfrute su pedido!</h2>
 </div>
 
 <br><br>
@@ -465,38 +465,46 @@
   <h1>Realice su pedido:</h1>
 </div>
 
-<form (ngSubmit)="placeOrder(orderForm)" #orderForm="ngForm" novalidate="">
-<div class="form-group">
-  Usuario:
-  <select #crickett>
-    <option *ngFor="let user of registeredUsersList" [value]="user.id">
-       {{user.id}} - {{user.first_name}} {{user.last_name}}
-    </option>
-  </select>
-  <br>Sucursal:
-  <select #cricket (change)="update($event)">
-    <option *ngFor="let branch of branchesList" [value]="branch.branch_id">
-       {{branch.branch_id}} - {{branch.name}}
-    </option>
-  </select>
-  <br><label for="tableNumber">Número de la mesa: *</label>
-  <input type="number" class="form-control" id="tableNumber" required [(ngModel)]="orderContent" name="tableNumber" #name="ngModel"
-    minlength="5" size="10">
-  <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-    <div *ngIf="name.errors?.required">
-      Este campo es requerido.
+
+<form (ngSubmit)="placeOrder(placeOrderForm)" #placeOrderForm="ngForm" novalidate="">
+  <div class="form-group">
+    Usuario:
+    <select #crickett (change)="updateSelectedUser($event)">
+      <option *ngFor="let user of registeredUsersList" [value]="user.id">
+         {{user.id}} - {{user.first_name}} {{user.last_name}}
+      </option>
+    </select>
+    <br>Aplicación:
+    <select #cricket (change)="updateSelectedApp($event)">
+      <option *ngFor="let app of appsList" [value]="app">
+         {{app}}
+      </option>
+    </select>
+    <br>Restaurante:
+    <select #cricket (change)="updateSelectedBranch($event)">
+      <option *ngFor="let branch of selectedAppBranches" [value]="branch.branch_id">
+         {{branch.branch_id}} - {{branch.name}}
+      </option>
+    </select>
+    <br><label for="tableNumber">Número de la mesa: *</label>
+    <input type="number" class="form-control" id="tableNumber" required [(ngModel)]="branchTableOrderId" name="tableNumber" #name="ngModel"
+      minlength="5" size="10">
+    <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+      <div *ngIf="name.errors?.required">
+        Este campo es requerido.
+      </div>
     </div>
-  </div>
-  <br><label for="orderContent">Contenido de la orden: *</label>
-  <input type="text" class="form-control" id="orderContent" required [(ngModel)]="branchTableOrderId" name="orderContent" #name="ngModel"
-         minlength="5" size="200">
-  <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-    <div *ngIf="name.errors?.required">
-      Este campo es requerido.
+    <br><label for="orderContent">Contenido de la orden: *</label>
+    <input type="text" class="form-control" id="orderContent" required [(ngModel)]="orderContent" name="orderContent" #name="ngModel"
+           minlength="5" size="200">
+    <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+      <div *ngIf="name.errors?.required">
+        Este campo es requerido.
+      </div>
     </div>
+    <br><input type="submit">
   </div>
-  <br><input type="submit">
-</div>
+</form>
 
 <br><br>
 

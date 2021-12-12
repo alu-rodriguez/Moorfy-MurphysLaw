@@ -38,8 +38,8 @@ def place_an_order():
         branch_id= branch_id,
         user_id= user_id,
         status_id= OrderStatuses.PENDING,
-        content= order_content,
         table_number= table_id,
+        content= order_content,
         timestamp= datetime.now()
     )
 
