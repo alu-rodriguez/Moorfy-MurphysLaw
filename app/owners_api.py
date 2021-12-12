@@ -13,7 +13,7 @@ def clients_api_info():
 
 # Actualiza la url del menu de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/update_menu?branch_id=3&menu_url=http://prueba.com/menusito.pdf
-@bp.route('/update_menu', methods=['PUT'])
+@bp.route('/update_menu', methods=['GET']) #methods=['PUT'])
 def update_menu():
     branch_id = request.args['branch_id']
     branch_menu_url = request.args['menu_url']
@@ -27,7 +27,7 @@ def update_menu():
 
 # Crea una sucursal de restaurante para el dueño
 # Ejemplo url: http://127.0.0.1:5000/owners/create_a_branch?name=ArquiWebers1&latitude=2.222&longitude=3.333&number_of_tables=4&email=5@test.com.ar&phone_number=66666666&logo_url=http://prueba.com/logo7.pdf&menu_url=http://prueba.com/menu8.pdf&mode=IN_PLACE&owner_id=2
-@bp.route('/create_a_branch', methods=['POST'])
+@bp.route('/create_a_branch', methods=['GET']) #methods=['POST'])
 def create_a_branch():
     branch_name = request.args['name']
     branch_latitude = request.args['latitude']
@@ -61,7 +61,7 @@ def create_a_branch():
 
 # Acepta una orden recibida
 # Ejemplo url: http://127.0.0.1:5000/owners/acept_order?order_id=1
-@bp.route('/acept_order', methods=['PUT'])
+@bp.route('/acept_order', methods=['GET']) #methods=['PUT'])
 def acept_order():
     order_id = request.args['order_id']
     order: Order = Order.query.filter(Order.id == order_id).one()
@@ -76,7 +76,7 @@ def acept_order():
 
 # Rechaza una orden recibida
 # Ejemplo url: http://127.0.0.1:5000/owners/reject_order?order_id=1
-@bp.route('/reject_order', methods=['PUT'])
+@bp.route('/reject_order', methods=['GET']) #methods=['PUT'])
 def reject_order():
     order_id = request.args['order_id']
     order: Order = Order.query.filter(Order.id == order_id).one()
@@ -91,7 +91,7 @@ def reject_order():
 
 # Pone en proceso una orden ya aceptada
 # Ejemplo url: http://127.0.0.1:5000/owners/start_making_order?order_id=1
-@bp.route('/start_making_order', methods=['PUT'])
+@bp.route('/start_making_order', methods=['GET']) #methods=['PUT'])
 def start_making_order():
     order_id = request.args['order_id']
     order: Order = Order.query.filter(Order.id == order_id).one()
@@ -106,7 +106,7 @@ def start_making_order():
 
 # Finaliza una orden en proceso, dejandola lista para ser retirada o servida
 # Ejemplo url: http://127.0.0.1:5000/owners/finalize_order?order_id=1
-@bp.route('/finalize_order', methods=['PUT'])
+@bp.route('/finalize_order', methods=['GET']) #methods=['PUT'])
 def finalize_order():
     order_id = request.args['order_id']
     order: Order = Order.query.filter(Order.id == order_id).one()
@@ -121,7 +121,7 @@ def finalize_order():
 
 # Actualiza la url del logo de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/update_logo?branch_id=3&logo_url=http://prueba.com/loguito.jpg
-@bp.route('/update_logo', methods=['PUT'])
+@bp.route('/update_logo', methods=['GET']) #methods=['PUT'])
 def update_logo():
     branch_id = request.args['branch_id']
     branch_logo_url = request.args['logo_url']
@@ -135,7 +135,7 @@ def update_logo():
 
 # Actualiza el teléfono de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/update_phone?branch_id=3&phone_number=11111111
-@bp.route('/update_phone', methods=['PUT'])
+@bp.route('/update_phone', methods=['GET']) #methods=['PUT'])
 def update_phone():
     branch_id = request.args['branch_id']
     branch_phone_number = request.args['phone_number']
@@ -149,7 +149,7 @@ def update_phone():
 
 # Actualiza el email de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/update_mail?branch_id=3&email=111@testito.com
-@bp.route('/update_mail', methods=['PUT'])
+@bp.route('/update_mail', methods=['GET']) #methods=['PUT'])
 def update_mail():
     branch_id = request.args['branch_id']
     branch_email = request.args['email']
@@ -163,7 +163,7 @@ def update_mail():
 
 # Cambia el modo de entrega de ordenes de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/change_mode?branch_id=3&mode=IN_PLACE
-@bp.route('/change_mode', methods=['PUT'])
+@bp.route('/change_mode', methods=['GET']) #methods=['PUT'])
 def change_mode():
     branch_id = request.args['branch_id']
     branch_mode = request.args['mode']
@@ -177,7 +177,7 @@ def change_mode():
 
 # Actualiza el número de mesas de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/update_number_of_tables?branch_id=3&number_of_tables=11
-@bp.route('/update_number_of_tables', methods=['PUT'])
+@bp.route('/update_number_of_tables', methods=['GET']) #methods=['PUT'])
 def update_number_of_tables():
     branch_id = request.args['branch_id']
     branch_number_of_tables = request.args['number_of_tables']
@@ -191,7 +191,7 @@ def update_number_of_tables():
 
 # Corrige la ubicación de la sucursal en cuestión
 # Ejemplo url: http://127.0.0.1:5000/owners/amend_location?branch_id=3&latitude=11.11&longitude=22.22
-@bp.route('/amend_location', methods=['PUT'])
+@bp.route('/amend_location', methods=['GET']) #methods=['PUT'])
 def amend_location():
     branch_id = request.args['branch_id']
     branch_latitude = request.args['latitude']
