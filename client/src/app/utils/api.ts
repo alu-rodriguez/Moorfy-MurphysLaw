@@ -94,7 +94,7 @@ const apiGet = <T>(path: string, urlBase: String) => {
 
 const apiPut = <T>(path: string, urlBase: String) => {
   return fetchAndParseResponse<T>({
-    method: HttpMethod.Put,
+    method: HttpMethod.Get,//Put
     path
   },
   urlBase);
@@ -102,7 +102,7 @@ const apiPut = <T>(path: string, urlBase: String) => {
 
 const apiPost = <T>(path: string, urlBase: String) => {
   return fetchAndParseResponse<T>({
-    method: HttpMethod.Post,
+    method: HttpMethod.Get,//Post
     path
   },
   urlBase);
@@ -119,7 +119,7 @@ const apiGetWithParams = <T>(path: string, params: string, urlBase: String) => {
 
 const apiPutWithParams = <T>(path: string, params: string, urlBase: String) => {
   return fetchAndParseResponseWithParams<T>({
-    method: HttpMethod.Put,
+    method: HttpMethod.Get,//Put
     path,
     params
   },
@@ -128,7 +128,7 @@ const apiPutWithParams = <T>(path: string, params: string, urlBase: String) => {
 
 const apiPostWithParams = <T>(path: string, params: string, urlBase: String) => {
   return fetchAndParseResponseWithParams<T>({
-    method: HttpMethod.Post,
+    method: HttpMethod.Get,//Post
     path,
     params
   },
@@ -137,7 +137,7 @@ const apiPostWithParams = <T>(path: string, params: string, urlBase: String) => 
 
 const apiPostWithParamsAndBody = <T>(path: string, params: string, urlBase: String, body: BodyModel) => {
   return fetchAndParseResponseWithParamsAndBody<T>({
-    method: HttpMethod.Post,
+    method: HttpMethod.Get,//Post
     path,
     params
   },

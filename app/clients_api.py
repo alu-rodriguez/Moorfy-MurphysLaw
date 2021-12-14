@@ -27,7 +27,7 @@ def branches_list():
 
 # Genera la orden en la base
 # URL ejemplo: http://127.0.0.1:5000/clients/place_an_order?branch_id=1&table_id=2&user_id=3&order_content=Pido%20la%20promo%204
-@bp.route('/place_an_order', methods=['POST'])
+@bp.route('/place_an_order', methods=['GET']) #methods=['POST'])
 def place_an_order():
     branch_id= request.args['branch_id']
     table_id= request.args['table_id']
@@ -72,7 +72,7 @@ def ask_status_of_order():
 
 # Llama al servicio de mesa
 # URL ejemplo: http://127.0.0.1:5000/clients/ask_for_server?branch_id=1&table_id=2
-@bp.route('/ask_for_server', methods=['PUT'])
+@bp.route('/ask_for_server', methods=['GET']) #methods=['PUT'])
 def ask_for_server():
     branch_id= request.args['branch_id']
     table_id= request.args['table_id']
